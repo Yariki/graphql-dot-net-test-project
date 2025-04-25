@@ -8,7 +8,18 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="8.2.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.3" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.15" />
   </ItemGroup>
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->

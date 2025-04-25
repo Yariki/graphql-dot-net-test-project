@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQlTest.Infrastructure.Persistance;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace GraphQlTest.Controllers
@@ -17,15 +20,20 @@ namespace GraphQlTest.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly AppDbContext _appDbContext;
+        
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, AppDbContext appDbContext)
         {
             _logger = logger;
+            _appDbContext = appDbContext;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            var catalogs = _appDbContext.Catalogs.ToList();
+            
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

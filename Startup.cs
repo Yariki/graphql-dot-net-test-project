@@ -1,8 +1,13 @@
+using GraphQL.Server.Ui.Voyager;
+using GraphQlTest.GraphQL;
+using GraphQlTest.Infrastructure.Persistance;
+using HotChocolate.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +27,19 @@ namespace GraphQlTest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<AppDbContext>(opt =>
+                opt.UseInMemoryDatabase("InMemoryDb"));
 
+            services.AddGraphQLServer()
+                .AddFiltering()
+                .AddQueryType(d => d.Name("Query"))
+                .AddType<CatalogQueryType>()
+                .AddType<ProductQueryType>()
+                .AddProjections()
+                .BindRuntimeType<int, IntType>()
+                .BindRuntimeType<decimal, DecimalType>()
+                .BindRuntimeType<string, StringType>();
+            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -45,6 +62,14 @@ namespace GraphQlTest
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseGraphQLVoyager("/voyager", new VoyagerOptions()
+            {
+                GraphQLEndPoint = "/graphql",
+            });
+
+           
+            
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -55,6 +80,7 @@ namespace GraphQlTest
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapGraphQL();
             });
 
             app.UseSpa(spa =>

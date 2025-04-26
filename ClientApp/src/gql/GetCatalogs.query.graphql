@@ -1,0 +1,8 @@
+query GetCatalogs {
+  catalogs {
+      id,
+      name,
+      description,
+      image
+  }
+}

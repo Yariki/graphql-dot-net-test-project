@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -475,4 +476,242 @@ export type UuidOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
   nlt?: InputMaybe<Scalars['UUID']['input']>;
   nlte?: InputMaybe<Scalars['UUID']['input']>;
+};
+
+
+
+export type ResolverTypeWrapper<T> = Promise<T> | T;
+
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+
+export type ResolverFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Promise<TResult> | TResult;
+
+export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
+
+export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
+}
+
+export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>;
+  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
+}
+
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
+  | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
+  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
+
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
+
+export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+  parent: TParent,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
+
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+
+export type NextResolverFn<T> = () => Promise<T>;
+
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+  next: NextResolverFn<TResult>,
+  parent: TParent,
+  args: TArgs,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => TResult | Promise<TResult>;
+
+
+
+/** Mapping between all available schema types and the resolvers types */
+export type ResolversTypes = {
+  BooleanOperationFilterInput: BooleanOperationFilterInput;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Catalog: ResolverTypeWrapper<Catalog>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  CatalogFilterInput: CatalogFilterInput;
+  CatalogsConnection: ResolverTypeWrapper<CatalogsConnection>;
+  CatalogsEdge: ResolverTypeWrapper<CatalogsEdge>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  DateTimeOperationFilterInput: DateTimeOperationFilterInput;
+  Decimal: ResolverTypeWrapper<Scalars['Decimal']['output']>;
+  DecimalOperationFilterInput: DecimalOperationFilterInput;
+  IntOperationFilterInput: IntOperationFilterInput;
+  PageInfo: ResolverTypeWrapper<PageInfo>;
+  Product: ResolverTypeWrapper<Product>;
+  ProductFilterInput: ProductFilterInput;
+  ProductsConnection: ResolverTypeWrapper<ProductsConnection>;
+  ProductsEdge: ResolverTypeWrapper<ProductsEdge>;
+  Query: ResolverTypeWrapper<{}>;
+  StringOperationFilterInput: StringOperationFilterInput;
+  UUID: ResolverTypeWrapper<Scalars['UUID']['output']>;
+  UuidOperationFilterInput: UuidOperationFilterInput;
+};
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = {
+  BooleanOperationFilterInput: BooleanOperationFilterInput;
+  Boolean: Scalars['Boolean']['output'];
+  Catalog: Catalog;
+  String: Scalars['String']['output'];
+  Int: Scalars['Int']['output'];
+  CatalogFilterInput: CatalogFilterInput;
+  CatalogsConnection: CatalogsConnection;
+  CatalogsEdge: CatalogsEdge;
+  DateTime: Scalars['DateTime']['output'];
+  DateTimeOperationFilterInput: DateTimeOperationFilterInput;
+  Decimal: Scalars['Decimal']['output'];
+  DecimalOperationFilterInput: DecimalOperationFilterInput;
+  IntOperationFilterInput: IntOperationFilterInput;
+  PageInfo: PageInfo;
+  Product: Product;
+  ProductFilterInput: ProductFilterInput;
+  ProductsConnection: ProductsConnection;
+  ProductsEdge: ProductsEdge;
+  Query: {};
+  StringOperationFilterInput: StringOperationFilterInput;
+  UUID: Scalars['UUID']['output'];
+  UuidOperationFilterInput: UuidOperationFilterInput;
+};
+
+export type CostDirectiveArgs = {
+  weight: Scalars['String']['input'];
+};
+
+export type CostDirectiveResolver<Result, Parent, ContextType = any, Args = CostDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type ListSizeDirectiveArgs = {
+  assumedSize?: Maybe<Scalars['Int']['input']>;
+  requireOneSlicingArgument?: Scalars['Boolean']['input'];
+  sizedFields?: Maybe<Array<Scalars['String']['input']>>;
+  slicingArgumentDefaultValue?: Maybe<Scalars['Int']['input']>;
+  slicingArguments?: Maybe<Array<Scalars['String']['input']>>;
+};
+
+export type ListSizeDirectiveResolver<Result, Parent, ContextType = any, Args = ListSizeDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type CatalogResolvers<ContextType = any, ParentType extends ResolversParentTypes['Catalog'] = ResolversParentTypes['Catalog']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedBy?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CatalogsConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CatalogsConnection'] = ResolversParentTypes['CatalogsConnection']> = {
+  edges?: Resolver<Maybe<Array<ResolversTypes['CatalogsEdge']>>, ParentType, ContextType>;
+  nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Catalog']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CatalogsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CatalogsEdge'] = ResolversParentTypes['CatalogsEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['Catalog']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
+export interface DecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Decimal'], any> {
+  name: 'Decimal';
+}
+
+export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
+  catalog?: Resolver<Maybe<ResolversTypes['Catalog']>, ParentType, ContextType>;
+  catalogId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Decimal'], ParentType, ContextType>;
+  stock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedBy?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductsConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductsConnection'] = ResolversParentTypes['ProductsConnection']> = {
+  edges?: Resolver<Maybe<Array<ResolversTypes['ProductsEdge']>>, ParentType, ContextType>;
+  nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Product']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductsEdge'] = ResolversParentTypes['ProductsEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  catalogs?: Resolver<Maybe<ResolversTypes['CatalogsConnection']>, ParentType, ContextType, Partial<QueryCatalogsArgs>>;
+  products?: Resolver<Maybe<ResolversTypes['ProductsConnection']>, ParentType, ContextType, Partial<QueryProductsArgs>>;
+};
+
+export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UUID'], any> {
+  name: 'UUID';
+}
+
+export type Resolvers<ContextType = any> = {
+  Catalog?: CatalogResolvers<ContextType>;
+  CatalogsConnection?: CatalogsConnectionResolvers<ContextType>;
+  CatalogsEdge?: CatalogsEdgeResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
+  Decimal?: GraphQLScalarType;
+  PageInfo?: PageInfoResolvers<ContextType>;
+  Product?: ProductResolvers<ContextType>;
+  ProductsConnection?: ProductsConnectionResolvers<ContextType>;
+  ProductsEdge?: ProductsEdgeResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  UUID?: GraphQLScalarType;
+};
+
+export type DirectiveResolvers<ContextType = any> = {
+  cost?: CostDirectiveResolver<any, any, ContextType>;
+  listSize?: ListSizeDirectiveResolver<any, any, ContextType>;
 };

@@ -8,27 +8,15 @@ import type { OptionOnSelectData, SelectionEvents, SelectProps } from "@fluentui
 
 import { ProductsTable } from './ProductsTable';
 
-import {
-    TableBody,
-    TableCell,
-    TableRow,
-    Table,
-    TableHeader,
-    TableHeaderCell,
-    TableCellLayout,
-    PresenceBadgeStatus,
-    Avatar,
-} from "@fluentui/react-components";
-import { on } from 'process';
-import { gql, useQuery } from '@apollo/client';
+interface CatalogValues {
+    id: string | undefined;
+    name: string | undefined;
+}
 
 export const  Products : React.FC = () => {
     const { data, loading, error } = useGetCatalogsQuery();
-    const [value, setValue] = React.useState<string | undefined>(undefined);
-    const [idValue, setIdValue] = React.useState<string | undefined>(undefined);
-    const [products, setProducts] = React.useState<any[]>([]);
-    const [loadingProducts, setLoadingProducts] = React.useState<boolean>(false);
-    const [errorProducts, setErrorProducts] = React.useState<string | undefined>(undefined);
+    const [value, setValue] = React.useState<CatalogValues>({ id: "", name: "" });
+
     
 
     if (loading) {
@@ -40,31 +28,14 @@ export const  Products : React.FC = () => {
     }
 
     const onOptionSelect = (event: SelectionEvents, optionData: OptionOnSelectData) => {
-        setValue(optionData.optionText);
-        setIdValue(optionData.optionValue);
-
-        const fetchProducts = async () => {
-            const { data, loading, error } = useQuery(
-                GET_PRODUCTS,
-                {
-                    variables: { catalogId: optionData.optionValue },
-                    fetchPolicy: 'network-only',
-                }
-            );
-            setLoadingProducts(loading);
-            setErrorProducts(error?.message);
-            setProducts(data?.products?.nodes || []);
-        }
-
-        fetchProducts();
-
+        setValue({id: optionData.optionValue, name: optionData.optionText});
     };
 
     return (
         <React.Fragment>
             <div>
                 <Label htmlFor='catalogs-select'>Catalogs</Label>
-                <Combobox id='catalogs-select' onOptionSelect={onOptionSelect} value={value} defaultValue={undefined} placeholder="Select a catalog">
+                <Combobox id='catalogs-select' onOptionSelect={onOptionSelect} value={value?.name} defaultValue={""} placeholder="Select a catalog">
                     {
                         data.catalogs?.nodes?.map((catalog) => (
                             <Option key={catalog?.id} value={catalog?.id}>
@@ -74,7 +45,7 @@ export const  Products : React.FC = () => {
                     }
                 </Combobox>
             </div>
-            <ProductsTable catalogId={idValue} />
+            <ProductsTable catalogId={value?.id} />
         </React.Fragment>
     );
 

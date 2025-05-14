@@ -44,7 +44,8 @@ public class AppDbContext : DbContext
                 Id = i, 
                 Name = $"Electronics Product {i}",
                 Price = (decimal)Math.Round(random.NextDouble() * 1000, 2),
-                CatalogId = 1
+                CatalogId = 1,
+                Stock = random.Next(1, 100)
             });
         }
     
@@ -55,7 +56,8 @@ public class AppDbContext : DbContext
                 Id = i, 
                 Name = $"Book {i-40}",
                 Price = (decimal)Math.Round(random.NextDouble() * 100, 2),
-                CatalogId = 2
+                CatalogId = 2,
+                Stock = random.Next(1, 100)
             });
         }
     
@@ -66,7 +68,8 @@ public class AppDbContext : DbContext
                 Id = i, 
                 Name = $"Clothing Item {i-80}",
                 Price = (decimal)Math.Round(random.NextDouble() * 200, 2),
-                CatalogId = 3
+                CatalogId = 3,
+                Stock = random.Next(1, 100)
             });
         }
     

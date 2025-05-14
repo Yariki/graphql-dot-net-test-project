@@ -1,5 +1,6 @@
 using GraphQL.Server.Ui.Voyager;
 using GraphQlTest.GraphQL;
+using GraphQlTest.GraphQL.Mutations;
 using GraphQlTest.Infrastructure.Persistance;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,8 @@ namespace GraphQlTest
                 .AddQueryType(d => d.Name("Query"))
                 .AddType<CatalogQueryType>()
                 .AddType<ProductQueryType>()
+                .AddMutationType(d => d.Name("Mutation"))
+                 .AddType<CatalogMutationsType>()
                 .AddProjections()
                 .BindRuntimeType<int, IntType>()
                 .BindRuntimeType<decimal, DecimalType>()

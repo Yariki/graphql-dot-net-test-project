@@ -14,17 +14,31 @@ const GET_PRODUCTS = gql(`query getProducts($catalogId: Int) {
     }
 }`);
 
+const GET_PRODUCTS_COUNT = gql(`query getProducts($catalogId: Int, $stock: Int = 0){
+    products (where: {catalogId: {eq: $catalogId}, stock: {gte: $stock}}){
+        nodes{
+            id
+            name
+            price
+            catalogId
+     		stock
+        }
+	}
+}`);
+
 export interface ProductsTableProps {
     catalogId: string;
+    count?: number;
 }
 
 
-export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId }) => {
+export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId, count }) => {
 
     catalogId = !catalogId || catalogId !== "" ? catalogId : "-1";
+    const stock = count ? count : 0;
 
-    const { data, loading, error } = useQuery(GET_PRODUCTS, {
-        variables: { catalogId },
+    const { data, loading, error } = useQuery(GET_PRODUCTS_COUNT, {
+        variables: { catalogId, stock },
         fetchPolicy: 'network-only',
     });
 
@@ -48,11 +62,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId }) => {
                     {data?.products?.nodes?.map((product: any) => (
                         <TableRow key={product.id}>
                             <TableCell>
-                                <TableCellLayout
-                                    media={<Avatar name={product.name} shape="square" size={40} style={{ width: '100px' }} />}
-                                    content={product.name}
-                                    description={product.description}
-                                />
+                                {product.name}
                             </TableCell>
                             <TableCell>{product.price}</TableCell>
                             <TableCell>{product.description}</TableCell>

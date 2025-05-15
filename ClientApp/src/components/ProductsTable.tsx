@@ -57,18 +57,25 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId, count }
                 {loading && <p>Loading...</p>}
                 {error && <p>Error</p>}
                 {!catalogId && <p>Please select a catalog</p>}
+                {
+                    data && data.products && data.products.nodes && data.products.nodes.length > 0 && (
+                        <TableBody>
+                        { 
+                            data.products?.nodes?.map((product: any) => (
+                            <TableRow key={product.id}>
+                                <TableCell>
+                                    {product.name}
+                                </TableCell>
+                                <TableCell>{product.price}</TableCell>
+                                <TableCell>{product.description}</TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                        
+                    )
+
+                }
                 
-                <TableBody>
-                    {data?.products?.nodes?.map((product: any) => (
-                        <TableRow key={product.id}>
-                            <TableCell>
-                                {product.name}
-                            </TableCell>
-                            <TableCell>{product.price}</TableCell>
-                            <TableCell>{product.description}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
 
             </Table>
         </>

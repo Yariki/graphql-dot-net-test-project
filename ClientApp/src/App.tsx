@@ -8,6 +8,7 @@ import { Products } from './components/Products';
 
 
 import './custom.css'
+import { Catalogs } from './components/Catalogs';
 
 export default () => (
     <Layout>
@@ -15,5 +16,6 @@ export default () => (
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
         <Route path='/products' component={Products} />
+        <Route path='/catalogs' component={Catalogs} />
     </Layout>
 );

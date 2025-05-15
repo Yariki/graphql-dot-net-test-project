@@ -39,6 +39,10 @@ export type Catalog = {
   updatedBy: Scalars['UUID']['output'];
 };
 
+export type CatalogDeleteInput = {
+  id: Scalars['Int']['input'];
+};
+
 export type CatalogFilterInput = {
   and?: InputMaybe<Array<CatalogFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
@@ -51,6 +55,12 @@ export type CatalogFilterInput = {
   or?: InputMaybe<Array<CatalogFilterInput>>;
   updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
   updatedBy?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type CatalogInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A connection to a list of items. */
@@ -116,6 +126,22 @@ export type IntOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   nlt?: InputMaybe<Scalars['Int']['input']>;
   nlte?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addCatalog?: Maybe<Catalog>;
+  deleteCatalog: Scalars['Boolean']['output'];
+};
+
+
+export type MutationAddCatalogArgs = {
+  input?: InputMaybe<CatalogInput>;
+};
+
+
+export type MutationDeleteCatalogArgs = {
+  input?: InputMaybe<CatalogDeleteInput>;
 };
 
 /** Information about pagination in a connection. */
@@ -321,7 +347,9 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   BooleanOperationFilterInput: BooleanOperationFilterInput;
   Catalog: ResolverTypeWrapper<Catalog>;
+  CatalogDeleteInput: CatalogDeleteInput;
   CatalogFilterInput: CatalogFilterInput;
+  CatalogInput: CatalogInput;
   CatalogsConnection: ResolverTypeWrapper<CatalogsConnection>;
   CatalogsEdge: ResolverTypeWrapper<CatalogsEdge>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -330,6 +358,7 @@ export type ResolversTypes = {
   DecimalOperationFilterInput: DecimalOperationFilterInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   IntOperationFilterInput: IntOperationFilterInput;
+  Mutation: ResolverTypeWrapper<{}>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Product: ResolverTypeWrapper<Product>;
   ProductFilterInput: ProductFilterInput;
@@ -347,7 +376,9 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   BooleanOperationFilterInput: BooleanOperationFilterInput;
   Catalog: Catalog;
+  CatalogDeleteInput: CatalogDeleteInput;
   CatalogFilterInput: CatalogFilterInput;
+  CatalogInput: CatalogInput;
   CatalogsConnection: CatalogsConnection;
   CatalogsEdge: CatalogsEdge;
   DateTime: Scalars['DateTime']['output'];
@@ -356,6 +387,7 @@ export type ResolversParentTypes = {
   DecimalOperationFilterInput: DecimalOperationFilterInput;
   Int: Scalars['Int']['output'];
   IntOperationFilterInput: IntOperationFilterInput;
+  Mutation: {};
   PageInfo: PageInfo;
   Product: Product;
   ProductFilterInput: ProductFilterInput;
@@ -418,6 +450,11 @@ export interface DecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTy
   name: 'Decimal';
 }
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addCatalog?: Resolver<Maybe<ResolversTypes['Catalog']>, ParentType, ContextType, Partial<MutationAddCatalogArgs>>;
+  deleteCatalog?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationDeleteCatalogArgs>>;
+};
+
 export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
   endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -472,6 +509,7 @@ export type Resolvers<ContextType = any> = {
   CatalogsEdge?: CatalogsEdgeResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Decimal?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductsConnection?: ProductsConnectionResolvers<ContextType>;

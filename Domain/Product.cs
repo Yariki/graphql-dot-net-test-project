@@ -10,7 +10,7 @@ public class Product : AuditableEntity
     public string Description { get; set; }
     
     public string Image { get; set; }
-    
+
     public int CatalogId { get; set; }
     
     public Catalog Catalog { get; set; }

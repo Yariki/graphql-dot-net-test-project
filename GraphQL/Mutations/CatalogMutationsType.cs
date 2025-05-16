@@ -17,10 +17,7 @@ namespace GraphQlTest.GraphQL.Mutations
             [Service] AppDbContext dbContext,
             CancellationToken cancellationToken)
         {
-            if(input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
+            ArgumentNullException.ThrowIfNull(input);
 
             var maxId = await dbContext.Catalogs.MaxAsync(c => c.Id, cancellationToken) ;
 

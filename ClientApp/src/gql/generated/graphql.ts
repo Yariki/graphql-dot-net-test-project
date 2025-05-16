@@ -131,7 +131,10 @@ export type IntOperationFilterInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addCatalog?: Maybe<Catalog>;
+  addProduct?: Maybe<Product>;
   deleteCatalog: Scalars['Boolean']['output'];
+  deleteProduct?: Maybe<Product>;
+  updateProduct?: Maybe<Product>;
 };
 
 
@@ -140,8 +143,23 @@ export type MutationAddCatalogArgs = {
 };
 
 
+export type MutationAddProductArgs = {
+  input?: InputMaybe<ProductInput>;
+};
+
+
 export type MutationDeleteCatalogArgs = {
   input?: InputMaybe<CatalogDeleteInput>;
+};
+
+
+export type MutationDeleteProductArgs = {
+  input?: InputMaybe<ProductDeleteInput>;
+};
+
+
+export type MutationUpdateProductArgs = {
+  input?: InputMaybe<ProductUpdateInput>;
 };
 
 /** Information about pagination in a connection. */
@@ -175,6 +193,10 @@ export type Product = {
   updatedBy: Scalars['UUID']['output'];
 };
 
+export type ProductDeleteInput = {
+  id: Scalars['Int']['input'];
+};
+
 export type ProductFilterInput = {
   and?: InputMaybe<Array<ProductFilterInput>>;
   catalog?: InputMaybe<CatalogFilterInput>;
@@ -192,6 +214,27 @@ export type ProductFilterInput = {
   stock?: InputMaybe<IntOperationFilterInput>;
   updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
   updatedBy?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type ProductInput = {
+  catalogId: Scalars['Int']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  isActive: Scalars['Boolean']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  price: Scalars['Decimal']['input'];
+  stock: Scalars['Int']['input'];
+};
+
+export type ProductUpdateInput = {
+  catalogId: Scalars['Int']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  image?: InputMaybe<Scalars['String']['input']>;
+  isActive: Scalars['Boolean']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  price: Scalars['Decimal']['input'];
+  stock: Scalars['Int']['input'];
 };
 
 /** A connection to a list of items. */
@@ -361,7 +404,10 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Product: ResolverTypeWrapper<Product>;
+  ProductDeleteInput: ProductDeleteInput;
   ProductFilterInput: ProductFilterInput;
+  ProductInput: ProductInput;
+  ProductUpdateInput: ProductUpdateInput;
   ProductsConnection: ResolverTypeWrapper<ProductsConnection>;
   ProductsEdge: ResolverTypeWrapper<ProductsEdge>;
   Query: ResolverTypeWrapper<{}>;
@@ -390,7 +436,10 @@ export type ResolversParentTypes = {
   Mutation: {};
   PageInfo: PageInfo;
   Product: Product;
+  ProductDeleteInput: ProductDeleteInput;
   ProductFilterInput: ProductFilterInput;
+  ProductInput: ProductInput;
+  ProductUpdateInput: ProductUpdateInput;
   ProductsConnection: ProductsConnection;
   ProductsEdge: ProductsEdge;
   Query: {};
@@ -452,7 +501,10 @@ export interface DecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTy
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addCatalog?: Resolver<Maybe<ResolversTypes['Catalog']>, ParentType, ContextType, Partial<MutationAddCatalogArgs>>;
+  addProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, Partial<MutationAddProductArgs>>;
   deleteCatalog?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationDeleteCatalogArgs>>;
+  deleteProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, Partial<MutationDeleteProductArgs>>;
+  updateProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, Partial<MutationUpdateProductArgs>>;
 };
 
 export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {

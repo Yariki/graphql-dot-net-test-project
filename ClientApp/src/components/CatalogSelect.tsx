@@ -5,6 +5,8 @@ import { useGetCatalogsQuery } from "../gql/generated/graphql";
 export interface CatalogSelectProps {
     selectedCatalogId?: number;
     onChange?: (catalogId: string) => void;
+    name?: string;
+    isRequired?: boolean;
 }
 
 export const CatalogSelect = (props: any) => {
@@ -30,11 +32,11 @@ export const CatalogSelect = (props: any) => {
 
     if (loading) return <div>Loading Catalogs...</div>;
     if (error) return <div>Error loading catalogs: {error.message}</div>;
-
+    
     return (
         <div>
-            <Label htmlFor='catalogs-select'>Catalogs</Label>
-            <Combobox id='catalogs-select' onOptionSelect={onOptionSelect} value={value?.name} defaultValue={value?.id} placeholder="Select a catalog">
+            <Label required={props.isRequired} htmlFor={props.name}>Catalogs</Label>
+            <Combobox id='catalogs-select' required={props.isRequired} name={props.name} onOptionSelect={onOptionSelect} value={value?.name} defaultValue={value?.id} placeholder="Select a catalog">
                 {
                     data.catalogs?.nodes?.map((catalog) => (
                         <Option key={catalog?.id} value={catalog?.id}>

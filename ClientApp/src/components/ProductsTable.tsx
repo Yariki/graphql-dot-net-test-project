@@ -55,7 +55,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId, count }
                     </TableRow>
                 </TableHeader>
                 {loading && <p>Loading...</p>}
-                {error && <p>Error</p>}
+                {catalogId && error && <p>Error</p>}
                 {!catalogId && <p>Please select a catalog</p>}
                 {
                     data && data.products && data.products.nodes && data.products.nodes.length > 0 && (

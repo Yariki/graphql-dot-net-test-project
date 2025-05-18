@@ -1,6 +1,8 @@
 import React from "react";
 import { Table, TableHeader, TableHeaderCell, TableRow, TableCellLayout, PresenceBadgeStatus, Avatar, TableBody, TableCell } from "@fluentui/react-components";
 import {gql, useQuery} from "@apollo/client";
+import { NavItem } from "reactstrap";
+import { Link, NavLink } from "react-router-dom";
 
 const GET_PRODUCTS = gql(`query getProducts($catalogId: Int) {
     products(where : {catalogId: {eq: $catalogId}}) {
@@ -64,7 +66,13 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId, count }
                             data.products?.nodes?.map((product: any) => (
                             <TableRow key={product.id}>
                                 <TableCell>
-                                    {product.name}
+                                    <NavLink tag={Link} 
+                                    className="text-dark" 
+                                    
+                                    to={`/product/${product.id}`} 
+                                    rel="noopener noreferrer">
+                                        {product.name}        
+                                    </NavLink>
                                 </TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell>{product.description}</TableCell>

@@ -6,7 +6,7 @@ import { ProductEdit, ProductEditState } from "./ProductEdit";
 
 export type ProductDetailsProps = RouteComponentProps<{ id: string }>;
 
-const EDIT_PRODUCT = gql(`
+const GET_PRODUCT = gql(`
 query GetProduct($id: Int!) {
     product(id: $id){
         name,
@@ -27,7 +27,7 @@ export const ProductDetails = (props: ProductDetailsProps) => {
 
     const { id } = props.match.params;
 
-    const { data, loading, error } = useQuery(EDIT_PRODUCT, { variables: { id: Number(id) } }); 
+    const { data, loading, error, refetch } = useQuery(GET_PRODUCT, { variables: { id: Number(id) } }); 
 
     if (loading) {
         return <p>Loading...</p>
@@ -41,6 +41,12 @@ export const ProductDetails = (props: ProductDetailsProps) => {
 
     if (!product) {
         return <p>Product not found.</p>
+    }
+    
+    const onCloseHandler = async (open: boolean) => {
+        if (!open) {
+            await refetch();
+        }
     }
 
     return (
@@ -68,7 +74,7 @@ export const ProductDetails = (props: ProductDetailsProps) => {
                     <Text>{product.isActive ? "Active" : "Inactive"}</Text>
                 </Stack>
             </Stack>
-            <ProductEdit state={ProductEditState.Edit} id={product.id}  product={product} /> 
+            <ProductEdit state={ProductEditState.Edit} id={product.id}  product={product}  onOpenChanged={onCloseHandler}/> 
         </Stack>
     );
 }

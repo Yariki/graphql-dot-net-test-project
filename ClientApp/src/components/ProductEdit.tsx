@@ -58,13 +58,15 @@ export interface ProductData {
 export interface ProductEditProps {
     state: ProductEditState;
     id?: number;
-    product?:  ProductData
+    product?:  ProductData;
+    onOpenChanged?: (open: boolean) => void;
 }
 
 export const ProductEdit = (props: ProductEditProps) => {
     
     const styles = useStyles();
     const [open, setOpen] = React.useState(false);
+   
     
     const {product} = props;
 
@@ -110,6 +112,9 @@ export const ProductEdit = (props: ProductEditProps) => {
                 await editProduct({variables: { input: internalProduct }});
             }
             setOpen(false);
+            if(props.onOpenChanged){
+                props.onOpenChanged(false);
+            }
         }catch (error) {
             console.log(error);
         }
@@ -134,11 +139,15 @@ export const ProductEdit = (props: ProductEditProps) => {
     const onCatalogChanged = (catalogId: string) => {
         setProduct({...internalProduct, catalogId: parseInt(catalogId)});
     }
+
+    const onOpenChanged = (open: boolean) => {
+        setOpen(open);
+    }
     
     return (
         <>
             <div>
-                <Dialog type="modal" open={open} onOpenChange={(e, data) => setOpen(data.open)}>
+                <Dialog type="modal" open={open} onOpenChange={(e, data) => onOpenChanged(data.open)} on>
                     <DialogTrigger>
                         <Button type="button" appearance="primary" icon={<AddCircleFilled />}>{ props.state === ProductEditState.Add ?  "Add Product" : "Edit Poduct"}</Button>
                     </DialogTrigger>
@@ -153,7 +162,7 @@ export const ProductEdit = (props: ProductEditProps) => {
                                     <Input required id="price" name="price" type="number" value={internalProduct.price} onChange={onHandleChange} />
                                     <Label required htmlFor={"stock"} >Stock</Label>
                                     <Input required id="stock" name="stock" type="number" value={internalProduct.stock} onChange={onHandleChange} />
-                                    <Checkbox required id="isActive" name="isActive" checked={internalProduct.isActive} label="Is Active"  onChange={onCheckboxChange} />
+                                    <Checkbox id="isActive" name="isActive" checked={internalProduct.isActive} label="Is Active"  onChange={onCheckboxChange} />
                                     <CatalogSelect  isRequired={true} name="catalogId" selectedCatalogId={internalProduct.catalogId} selectCatalogName={catalogName} onChange={onCatalogChanged}/>
                                 </DialogContent>
                                 <DialogActions>

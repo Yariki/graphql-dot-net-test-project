@@ -20,15 +20,6 @@ export const CatalogSelect = (props: CatalogSelectProps) => {
 
     const [value, setValue] = React.useState<{ id: string | undefined; name: string | undefined }>(initData);
 
-    // useEffect(() => {
-    //     const catalogId = props.selectedCatalogId;
-    //     if (catalogId) {
-    //         const catalogName = selectCatalogName === null || selectCatalogName === undefined ? "" : selectCatalogName;
-    //         setValue({ id: catalogId.toString(), name: catalogName });
-    //     }
-    // },
-    // []);
-
     const { data, loading, error } = useGetCatalogsQuery();
 
     const onOptionSelect = (event: SelectionEvents, optionData: OptionOnSelectData) => {

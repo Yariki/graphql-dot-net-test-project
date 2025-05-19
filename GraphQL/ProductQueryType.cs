@@ -5,6 +5,7 @@ using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQlTest.GraphQL;
 
@@ -28,7 +29,9 @@ public class ProductQueryType
             return null;
         }
 
-        var product = context.Products.FirstOrDefault(p => p.Id == id);
+        var product = context.Products
+            .Include(product => product.Catalog)
+            .FirstOrDefault(p => p.Id == id);
         return product;
     }
 }

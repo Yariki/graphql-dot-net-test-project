@@ -44,7 +44,7 @@ export enum ProductEditState {
     Edit
 };
 
-interface ProductData {
+export interface ProductData {
     name: string;
     price: number;
     description: string;
@@ -58,6 +58,7 @@ interface ProductData {
 export interface ProductEditProps {
     state: ProductEditState;
     id?: number;
+    product?:  ProductData
 }
 
 export const ProductEdit = (props: ProductEditProps) => {
@@ -65,36 +66,48 @@ export const ProductEdit = (props: ProductEditProps) => {
     const styles = useStyles();
     const [open, setOpen] = React.useState(false);
     
-    let initialProduct: ProductData = {
+    const {product} = props;
+
+    let initialProduct: ProductData =  product === null  || product === undefined ? {
         name: "",
         price: 0,
         description: "",
         catalogId: 0,
         stock: 0,
         image: "",
-        isActive: false};
+        isActive: false} : {
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            catalogId: product.catalogId,
+            stock: product.stock,
+            image: product.image,
+            isActive: product.isActive
+        }
     if(props.state === ProductEditState.Edit){
         initialProduct["id"] = props.id;
     }
     
-    const [product, setProduct] = React.useState<ProductData>(initialProduct)
-    
-    useEffect(() => {
-        
-    },[])
+    const catalogName = product === undefined
+                        || product === null 
+                        || product?.catalog === null 
+                        || product.catalog === undefined 
+                        ?  ""
+                        : product?.catalog?.name ;
+
+    const [internalProduct, setProduct] = React.useState<ProductData>(initialProduct)
     
     const [addProduct, {loading, error}] = useMutation(ADD_PRODUCT);
     const [editProduct, {loading: editLoading, error: editError}] = useMutation(EDIT_PRODUCT);
-
-
+    
     const onHandleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
         
         try {
             if(props.state === ProductEditState.Add){
-                await addProduct({variables: { input: product }});
+                await addProduct({variables: { input: internalProduct }});
             }else{
-                await editProduct({variables: { input: product }});
+                await editProduct({variables: { input: internalProduct }});
             }
             setOpen(false);
         }catch (error) {
@@ -111,15 +124,15 @@ export const ProductEdit = (props: ProductEditProps) => {
             newValue = Number(value);
         }
         
-        setProduct({...product, [name]: newValue});
+        setProduct({...internalProduct, [name]: newValue});
     };
     
     const onCheckboxChange =(ev: ChangeEvent<HTMLInputElement>, {checked}: CheckboxOnChangeData) => {
-        setProduct({...product, isActive: checked as boolean});
+        setProduct({...internalProduct, isActive: checked as boolean});
     }
     
     const onCatalogChanged = (catalogId: string) => {
-        setProduct({...product, catalogId: parseInt(catalogId)});
+        setProduct({...internalProduct, catalogId: parseInt(catalogId)});
     }
     
     return (
@@ -127,7 +140,7 @@ export const ProductEdit = (props: ProductEditProps) => {
             <div>
                 <Dialog type="modal" open={open} onOpenChange={(e, data) => setOpen(data.open)}>
                     <DialogTrigger>
-                        <Button type="button" appearance="primary" icon={<AddCircleFilled />}>Add Product</Button>
+                        <Button type="button" appearance="primary" icon={<AddCircleFilled />}>{ props.state === ProductEditState.Add ?  "Add Product" : "Edit Poduct"}</Button>
                     </DialogTrigger>
                     <DialogSurface>
                         <form onSubmit={onHandleSubmit}>
@@ -135,16 +148,16 @@ export const ProductEdit = (props: ProductEditProps) => {
                                 <DialogTitle>{props.state === ProductEditState.Add ? "Add Product" : "Edit Product"}</DialogTitle>    
                                 <DialogContent className={styles.content}>
                                     <Label required htmlFor={"name"} >Name</Label>
-                                    <Input required id="name" name="name" value={product.name} onChange={onHandleChange} />
+                                    <Input required id="name" name="name" value={internalProduct.name} onChange={onHandleChange} />
                                     <Label required htmlFor={"price"} >Price</Label>
-                                    <Input required id="price" name="price" type="number" value={product.price} onChange={onHandleChange} />
+                                    <Input required id="price" name="price" type="number" value={internalProduct.price} onChange={onHandleChange} />
                                     <Label required htmlFor={"stock"} >Stock</Label>
-                                    <Input required id="stock" name="stock" type="number" value={product.stock} onChange={onHandleChange} />
-                                    <Checkbox required id="isActive" name="isActive" checked={product.isActive} label="Is Active"  onChange={onCheckboxChange} />
-                                    <CatalogSelect  isRequired={true} name="catalogId" value={product.catalogId} onChange={onCatalogChanged}/>
+                                    <Input required id="stock" name="stock" type="number" value={internalProduct.stock} onChange={onHandleChange} />
+                                    <Checkbox required id="isActive" name="isActive" checked={internalProduct.isActive} label="Is Active"  onChange={onCheckboxChange} />
+                                    <CatalogSelect  isRequired={true} name="catalogId" selectedCatalogId={internalProduct.catalogId} selectCatalogName={catalogName} onChange={onCatalogChanged}/>
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button type="submit" appearance="primary" >Add</Button>
+                                    <Button type="submit" appearance="primary" >{props.state === ProductEditState.Add ? "Add" : "Update"}</Button>
                                     <DialogTrigger>
                                         <Button type="button" appearance="secondary" >Cancel</Button>
                                     </DialogTrigger>

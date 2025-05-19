@@ -4,22 +4,30 @@ import { useGetCatalogsQuery } from "../gql/generated/graphql";
 
 export interface CatalogSelectProps {
     selectedCatalogId?: number;
+    selectCatalogName?: string;
     onChange?: (catalogId: string) => void;
     name?: string;
     isRequired?: boolean;
 }
 
-export const CatalogSelect = (props: any) => {
+export const CatalogSelect = (props: CatalogSelectProps) => {
 
-    const [value, setValue] = React.useState<{ id: string | undefined; name: string | undefined }>({ id: "", name: "" });
+    const {selectedCatalogId, selectCatalogName} = props;
+    const initData = selectedCatalogId === null 
+                    || selectedCatalogId === undefined 
+                    ? { id: "", name: "" } 
+                    : {id: selectedCatalogId.toString(), name: selectCatalogName === null || selectCatalogName === undefined ? "" : selectCatalogName?.toString()};
 
-    useEffect(() => {
-        const catalogId = props.selectedCatalogId;
-        if (catalogId) {
-            setValue({ id: catalogId.toString(), name: "" });
-        }
-    },
-    []);
+    const [value, setValue] = React.useState<{ id: string | undefined; name: string | undefined }>(initData);
+
+    // useEffect(() => {
+    //     const catalogId = props.selectedCatalogId;
+    //     if (catalogId) {
+    //         const catalogName = selectCatalogName === null || selectCatalogName === undefined ? "" : selectCatalogName;
+    //         setValue({ id: catalogId.toString(), name: catalogName });
+    //     }
+    // },
+    // []);
 
     const { data, loading, error } = useGetCatalogsQuery();
 

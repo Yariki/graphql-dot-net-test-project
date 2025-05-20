@@ -33,6 +33,7 @@ namespace GraphQlTest
 
             services.AddGraphQLServer()
                 .AddFiltering()
+                .AddPagingArguments()
                 .AddQueryType(d => d.Name("Query"))
                 .AddType<CatalogQueryType>()
                 .AddType<ProductQueryType>()

@@ -13,7 +13,7 @@ namespace GraphQlTest.GraphQL;
 public class ProductQueryType
 {
     
-    [UsePaging]
+    [UsePaging(IncludeTotalCount = true, MaxPageSize = 100, DefaultPageSize = 10)]
     [UseProjection]
     [UseFiltering]
     public IQueryable<Product> GetProducts([Service] AppDbContext context)

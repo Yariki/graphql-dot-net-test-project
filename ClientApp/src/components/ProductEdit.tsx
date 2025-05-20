@@ -66,7 +66,6 @@ export const ProductEdit = (props: ProductEditProps) => {
     
     const styles = useStyles();
     const [open, setOpen] = React.useState(false);
-   
     
     const {product} = props;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, TableHeader, TableHeaderCell, TableRow, TableCellLayout, PresenceBadgeStatus, Avatar, TableBody, TableCell } from "@fluentui/react-components";
+import { Table, TableHeader, TableHeaderCell, TableRow, TableCellLayout, PresenceBadgeStatus, Avatar, TableBody, TableCell, Button, Select, Label } from "@fluentui/react-components";
 import {gql, useQuery} from "@apollo/client";
 import { NavItem } from "reactstrap";
 import { Link, NavLink } from "react-router-dom";
@@ -49,11 +49,13 @@ const GET_PRODUCTS = gql(`query getProducts($catalogId: Int) {
     }
 }`);
 
-const GET_PRODUCTS_COUNT = gql(`query getProducts($catalogId: Int, $stock: Int = 0, $first: Int!, $after: String) {
+const GET_PRODUCTS_COUNT = gql(`query getProducts($catalogId: Int, $stock: Int = 0, $first: Int, $after: String, $last: Int, $before: String) {
   products(
     where: { catalogId: { eq: $catalogId }, stock: { gte: $stock } }
     first: $first
     after: $after
+    last: $last
+    before: $before
   ) {
     edges {
       cursor
@@ -176,23 +178,23 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ catalogId, count }
             </Table>
 
             <div style={{ marginTop: '1rem' }}>
-                <button onClick={handlePrev} disabled={!pageInfo.hasPreviousPage}>
+                <Button onClick={handlePrev} disabled={!pageInfo.hasPreviousPage}>
                 Previous
-                </button>
-                <button onClick={handleNext} disabled={!pageInfo.hasNextPage} style={{ marginLeft: '1rem' }}>
+                </Button>
+                <Button onClick={handleNext} disabled={!pageInfo.hasNextPage} style={{ marginLeft: '1rem' }}>
                 Next
-                </button>
+                </Button>
 
-                <label style={{ marginLeft: '1rem' }}>
+                <Label style={{ marginLeft: '1rem' }}>
                 Page Size:
-                <select value={internalPageInfo.pageSize} onChange={handlePageSizeChange} style={{ marginLeft: '0.5rem' }}>
+                <Select value={internalPageInfo.pageSize} onChange={handlePageSizeChange} style={{ marginLeft: '0.5rem' }}>
                     {[5, 10, 20, 50].map(size => (
                     <option key={size} value={size}>
                         {size}
                     </option>
                     ))}
-                </select>
-                </label>
+                </Select>
+                </Label>
             </div>
         </>
     );
